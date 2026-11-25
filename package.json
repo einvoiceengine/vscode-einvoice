@@ -1,0 +1,154 @@
+{
+  "name": "einvoice-validator",
+  "displayName": "E-Invoice Validator (XRechnung, ZUGFeRD, Peppol)",
+  "description": "Validate XRechnung, ZUGFeRD / Factur-X, Peppol BIS, EN 16931 (UBL, CII), Facturae and KSeF invoices with the official rule sets. Errors show in the Problems panel with rule id and line.",
+  "version": "0.1.0",
+  "publisher": "einvoiceengine",
+  "license": "MIT",
+  "icon": "images/icon.png",
+  "homepage": "https://einvoiceengine.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/einvoiceengine/vscode-einvoice"
+  },
+  "bugs": {
+    "url": "https://github.com/einvoiceengine/vscode-einvoice/issues",
+    "email": "support@einvoiceengine.com"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Linters"
+  ],
+  "keywords": [
+    "e-invoice",
+    "einvoice",
+    "xrechnung",
+    "zugferd",
+    "factur-x",
+    "peppol",
+    "en16931",
+    "ubl",
+    "cii",
+    "facturae",
+    "ksef",
+    "validator"
+  ],
+  "galleryBanner": {
+    "color": "#0f172a",
+    "theme": "dark"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:xml"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": true
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "einvoice.validate",
+        "title": "Validate current file",
+        "category": "E-Invoice",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "einvoice.setApiKey",
+        "title": "Set API key",
+        "category": "E-Invoice"
+      },
+      {
+        "command": "einvoice.clearApiKey",
+        "title": "Remove API key",
+        "category": "E-Invoice"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "einvoice.validate",
+          "when": "resourceExtname =~ /^\\.(xml|pdf)$/i",
+          "group": "7_modification"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "einvoice.validate",
+          "when": "resourceExtname =~ /^\\.(xml|pdf)$/i"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "einvoice.validate",
+          "when": "resourceExtname =~ /^\\.xml$/i",
+          "group": "navigation@90"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "E-Invoice",
+      "properties": {
+        "einvoice.validateOnSave": {
+          "type": "boolean",
+          "default": false,
+          "description": "Validate .xml invoices (UBL, CII, Facturae, KSeF) every time they are saved. Other XML files are skipped. Each save counts as one check."
+        },
+        "einvoice.baseUrl": {
+          "type": "string",
+          "default": "https://einvoiceengine.com",
+          "scope": "application",
+          "pattern": "^https?://",
+          "description": "Base URL of the E-Invoicing API. Change only for a self-hosted installation. User setting only: a workspace cannot redirect your API key."
+        },
+        "einvoice.language": {
+          "type": "string",
+          "default": "",
+          "enum": [
+            "",
+            "en",
+            "de",
+            "fr",
+            "es",
+            "it",
+            "pl",
+            "nl",
+            "pt"
+          ],
+          "enumDescriptions": [
+            "Same as VS Code",
+            "English",
+            "Deutsch",
+            "Français",
+            "Español",
+            "Italiano",
+            "Polski",
+            "Nederlands",
+            "Português"
+          ],
+          "description": "Language of the explanations and suggestions."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test test/core.test.mjs",
+    "test:live": "npm run build && EINV_LIVE=1 node --test test/core.test.mjs",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "1.90.0",
+    "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.25.0",
+    "typescript": "~5.9.3"
+  }
+}

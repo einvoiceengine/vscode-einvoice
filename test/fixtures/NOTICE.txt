@@ -1,0 +1,2 @@
+xrechnung-ubl.xml: sample invoice from the XRechnung test suite by KoSIT
+(https://github.com/itplr-kosit/xrechnung-testsuite), Apache License 2.0.
